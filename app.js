@@ -1,7 +1,10 @@
-const Choices = require('inquirer/lib/objects/choices')
-
+// const Choices = require('inquirer/lib/objects/choices')
 var inquirer = require('inquirer')
 var mysql = require('mysql')
+// var express = require('express');
+// const app = express ();
+
+// const PORT = process.env.PORT || 8080
 
 // create the connection information for the sql database
 var connection = mysql.createConnection({
@@ -21,12 +24,13 @@ var connection = mysql.createConnection({
 connection.connect(function(err) {
     if (err) throw err
     // run the start function after the connection is made to prompt the user
-    start()
+    promptUser()
 })
 
-function start() {
-    inquirer
-        .prompt({
+async function promptUser() {
+    let answers
+    try {
+        const answers = await inquirer.prompt({
             name: 'choice',
             type: 'list',
             message: 'What would you like to do?',
@@ -37,7 +41,14 @@ function start() {
                 'update employee info',
             ],
         })
-        .then(function(answer) {
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+async function tableAction() {
+    try {
+        var action = await function(answer) {
             switch (answer.choice) {
                 case 'create department':
                     createDepartment()
@@ -61,5 +72,9 @@ function start() {
             //         connection.end()
             // }
             console.log(answer)
-        })
+        }
+    } catch (error) {
+        console.log(error)
+    }
 }
+tableAction();
