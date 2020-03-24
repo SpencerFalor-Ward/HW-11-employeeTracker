@@ -22,6 +22,9 @@ role_id INT,
 manager_id INT,
 );
 
+INSERT INTO department (name)
+VALUES ("Ahmed");
+
 
 
 

@@ -2,3 +2,5 @@
 
 need inquire
 some inputs depend on each other
+
+in inquire there are multiple paths to take depending on the user answer. New employee, update, etc.
