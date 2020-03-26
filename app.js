@@ -18,7 +18,7 @@ var connection = mysql.createConnection({
 
     // Your password
     password: 'root',
-    database: 'employee',
+    database: 'employee_db',
 })
 
 connection.connect(function(err) {
@@ -106,7 +106,7 @@ const createDepartment = async () => {
             function(err, res) {
                 if (err) throw err
                 //console logs out rows affected
-                console.log(res.affectedRows + ' departmentt inserted!\n')
+                console.log(res.affectedRows + ' department inserted!\n')
                 // Call updateDepartment AFTER the INSERT completes
                 promptUser()
             }
@@ -124,4 +124,31 @@ function readDepartment() {
         console.table(res)
         connection.end()
     })
+}
+
+const addEmployee = async () => {
+    console.log('Creating a new employee...\n')
+    try {
+        const departInput = await inquirer.prompt({
+            name: 'employee',
+            type: 'input',
+            message: 'What is the name of the employee?',
+        })
+
+        connection.query(
+            'INSERT INTO employee SET ?',
+            {
+                name: departInput.department, //field from table
+            },
+            function(err, res) {
+                if (err) throw err
+                //console logs out rows affected
+                console.log(res.affectedRows + ' employee inserted!\n')
+                // Call updateDepartment AFTER the INSERT completes
+                promptUser()
+            }
+        )
+        // logs the actual query being run
+        console.log(query.sql)
+    } catch (error) {}
 }
