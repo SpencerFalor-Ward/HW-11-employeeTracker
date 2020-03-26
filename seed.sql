@@ -22,6 +22,3 @@ last_name  VARCHAR(30),
 role_id INT references role(id),
 manager_id INT references employee(id)
 );
-
-INSERT INTO department (name)
-VALUES ("HR");
