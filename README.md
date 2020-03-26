@@ -28,4 +28,4 @@ Absolutely, this certainly could be improved.
 git at me
 
 ## Contact
-mailto: srfalorward@ucdavis.edu
+srfalorward@ucdavis.edu
