@@ -51,13 +51,14 @@ async function promptUser() {
     tableAction(answers) //passing answers as promptUser
 }
 
-const tableAction = promptUser => {
+const tableAction = async promptUser => {
     switch (promptUser.choice) {
         case 'create department':
-            createDepartment()
-                .then()
-                .catch(err => console.log(err)) //the .then and the .catch gives us data and executes the "try/catch" of createDepartment()
-
+            try {
+                await createDepartment()
+            } catch (err) {
+                throw err
+            }
             break
         case 'view department':
             readDepartment()
@@ -66,9 +67,11 @@ const tableAction = promptUser => {
 
             break
         case 'add employee':
-            addEmployee()
-                .then()
-                .catch(err => console.log(err))
+            try {
+                await addEmployee()
+            } catch (err) {
+                throw err
+            }
             break
         case 'add employee role':
             addEmployeeRole()
@@ -129,17 +132,25 @@ function readDepartment() {
 const addEmployee = async () => {
     console.log('Creating a new employee...\n')
     try {
-        const departInput = await inquirer.prompt({
-            name: 'employee',
-            type: 'input',
-            message: 'What is the name of the employee?',
-        })
+        const { firstName, lastName } = await inquirer.prompt(
+            //the { firstName, lastName } extracts the data from the prompt
+            [
+                {
+                    name: 'firstName',
+                    type: 'input',
+                    message: 'What is the first name of the employee?',
+                },
+                {
+                    name: 'lastName',
+                    type: 'input',
+                    message: 'What is the last name of the employee?',
+                },
+            ]
+        )
 
         connection.query(
-            'INSERT INTO employee SET ?',
-            {
-                name: departInput.department, //field from table
-            },
+            'INSERT INTO employee (first_name, last_name) VALUES (?, ?)',
+            [firstName, lastName],
             function(err, res) {
                 if (err) throw err
                 //console logs out rows affected
@@ -151,4 +162,13 @@ const addEmployee = async () => {
         // logs the actual query being run
         console.log(query.sql)
     } catch (error) {}
+}
+function readDepartment() {
+    console.log('Selecting employee...\n')
+    connection.query('SELECT * FROM employee', function(err, res) {
+        if (err) throw err
+        // Log all results of the SELECT statement
+        console.table(res)
+        connection.end()
+    })
 }
