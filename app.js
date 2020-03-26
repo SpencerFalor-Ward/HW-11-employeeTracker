@@ -28,9 +28,10 @@ connection.connect(function(err) {
 })
 
 async function promptUser() {
+    //answers defined here so no need to redefine after try{}
     let answers
     try {
-        const answers = await inquirer.prompt({
+        answers = await inquirer.prompt({
             name: 'choice',
             type: 'list',
             message: 'What would you like to do?',
@@ -39,42 +40,88 @@ async function promptUser() {
                 'add employee',
                 'add employee role',
                 'update employee info',
+                'view department',
+                'exit',
             ],
         })
     } catch (error) {
         console.log(error)
     }
+    console.log(answers)
+    tableAction(answers) //passing answers as promptUser
 }
 
-async function tableAction() {
-    try {
-        var action = await function(answer) {
-            switch (answer.choice) {
-                case 'create department':
-                    createDepartment()
-                    break
-                case 'add employee':
-                    addEmployee()
-                    break
-                case 'add employee role':
-                    addEmployeeRole()
-                    break
-                case 'update employee info':
-                    updateEmployee()
-                    break
-            }
-            //     // based on their answer, either call the bid or the post functions
-            // if (answer.choice === 'create department') {
-            //     createDepartment()
-            //     } else if (answer.postOrBid === 'BID') {
-            //         bidAuction()
-            //     } else {
-            //         connection.end()
-            // }
-            console.log(answer)
-        }
-    } catch (error) {
-        console.log(error)
+const tableAction = promptUser => {
+    switch (promptUser.choice) {
+        case 'create department':
+            createDepartment()
+                .then()
+                .catch(err => console.log(err)) //the .then and the .catch gives us data and executes the "try/catch" of createDepartment()
+
+            break
+        case 'view department':
+            readDepartment()
+                .then()
+                .catch(err => console.log(err)) //the .then and the .catch gives us data and executes the "try/catch" of createDepartment()
+
+            break
+        case 'add employee':
+            addEmployee()
+                .then()
+                .catch(err => console.log(err))
+            break
+        case 'add employee role':
+            addEmployeeRole()
+                .then()
+                .catch(err => console.log(err))
+            break
+        case 'update employee info':
+            updateEmployee()
+                .then()
+                .catch(err => console.log(err))
+            break
+        case 'Exit':
+            exit()
+                .then()
+                .catch(err => console.log(err))
+            break
     }
+    console.log(promptUser.choice)
 }
-tableAction();
+
+const createDepartment = async () => {
+    console.log('Creating a new department...\n')
+    try {
+        const departInput = await inquirer.prompt({
+            name: 'department',
+            type: 'input',
+            message: 'What is the name of your department?',
+        })
+
+        connection.query(
+            'INSERT INTO department SET ?',
+            {
+                name: departInput.department, //field from table
+            },
+            function(err, res) {
+                if (err) throw err
+                //console logs out rows affected
+                console.log(res.affectedRows + ' departmentt inserted!\n')
+                // Call updateDepartment AFTER the INSERT completes
+                promptUser()
+            }
+        )
+        // logs the actual query being run
+        console.log(query.sql)
+    } catch (error) {}
+}
+
+function readDepartment() {
+    console.log('Selecting department...\n')
+    connection.query('SELECT * FROM department', function(err, res) {
+        if (err) throw err
+        // Log all results of the SELECT statement
+        console.table(res)
+        connection.end()
+    })
+}

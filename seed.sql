@@ -1,33 +1,27 @@
+DROP DATABASE IF EXISTS employee;
 CREATE DATABASE employee;
 USE employee;
 
 
 CREATE TABLE department (
-id  INT PRIMARY KEY,
-name  VARCHAR(30),
+id  INT PRIMARY KEY AUTO_INCREMENT,
+name  VARCHAR(30)
 );
 
 CREATE TABLE role (
-id  INT PRIMARY KEY,
-titel  VARCHAR(30),
+id  INT PRIMARY KEY AUTO_INCREMENT,
+title  VARCHAR(30),
 salary DECIMAL,
-department_id INT
+department_id INT references department(id)
 );
 
 CREATE TABLE employee (
-id  INT PRIMARY KEY,
+id  INT PRIMARY KEY AUTO_INCREMENT,
 first_name  VARCHAR(30),
 last_name  VARCHAR(30),
-role_id INT,
-manager_id INT,
+role_id INT references role(id),
+manager_id INT references employee(id)
 );
 
 INSERT INTO department (name)
-VALUES ("Ahmed");
-
-
-
-
-
-
-
+VALUES ("HR");
