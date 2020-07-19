@@ -8,7 +8,7 @@ A CLI that that generates an employee database from the user input for each empl
 ## Table of contents
 - [Installation](#Installation)
 - [Usage](#Usage)
-- [Liscence](#Liscence)
+- [License](#License)
 - [Contributing](#Contributing)
 - [Questions](#Questions)
 - [Contact](#Contact)
