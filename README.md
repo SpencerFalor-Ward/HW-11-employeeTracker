@@ -19,8 +19,8 @@ install the following node packages: inquirer, mysql, console.table
 ## Usage
 User inputs employee information, that is stored and the user can view the information for all employees in a table displayed in the terminal
 
-## Liscence
-NA
+## License
+Licensed under the [MIT License](https://choosealicense.com/licenses/mit/) license.
 
 ## Contributing
 Absolutely, this certainly could be improved.
